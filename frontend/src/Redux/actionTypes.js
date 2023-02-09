@@ -1,0 +1,9 @@
+export const SET_ACCURACY = "SET_ACCURACY";
+export const SET_TYPED_CHARS = "SET_TYPED_CHARS";
+export const SET_START_TIME = "SET_START_TIME";
+export const SET_WORD_COUNT = "SET_WORD_COUNT";
+export const SET_WPM = "SET_WPM";
+export const SET_LEFT_PADDING = "SET_LEFT_PADDING";
+export const SET_OUTGOING_CHARS = "SET_OUTGOING_CHARS";
+export const SET_CURRENT_CHAR = "SET_CURRENT_CHAR";
+export const SET_INCOMING_CHARS = "SET_INCOMING_CHARS";
