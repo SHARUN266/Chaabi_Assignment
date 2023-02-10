@@ -1,20 +1,26 @@
-import React, { useState } from "react";
+import React from "react";
 import useKeyPress from "../components/KeyPress";
 import { generate } from "../utils/RandomWordGenerator";
-const initialWords = generate();
+
 import "../App.css";
+import { useDispatch, useSelector } from "react-redux";
 import click from "../media/sounds/click.mp3";
 import clack from "../media/sounds/clack.mp3";
 import { currentTime } from "../utils/CurrentTime";
+import * as actionTypes from "../Redux/actionTypes";
 function Home() {
-  const [accuracy, setAccuracy] = useState(0);
-  const [typedChars, setTypedChars] = useState("");
-  const [startTime, setStartTime] = useState();
-  const [wordCount, setWordCount] = useState(0);
-  const [wpm, setWpm] = useState(0);
-  const [leftPadding, setLeftPadding] = useState(
-    new Array(20).fill(" ").join("")
-  );
+  const dispatch = useDispatch();
+  const {
+    accuracy,
+    typedChars,
+    startTime,
+    wordCount,
+    wpm,
+    leftPadding,
+    outgoingChars,
+    currentChar,
+    incomingChars,
+  } = useSelector((state) => state);
   const wrongSound = () => {
     const sound = new Audio(clack);
     return sound.play();
@@ -23,48 +29,43 @@ function Home() {
     const sound = new Audio(click);
     return sound.play();
   };
-  const [outgoingChars, setOutgoingChars] = useState("");
-  const [currentChar, setCurrentChar] = useState(initialWords.charAt(0));
-  const [incomingChars, setIncomingChars] = useState(initialWords.substr(1));
   useKeyPress((key) => {
     let updatedOutgoingChars = outgoingChars;
     let updatedIncomingChars = incomingChars;
     if (!startTime) {
-      setStartTime(currentTime());
+      dispatch({ type: actionTypes.SET_START_TIME, payload: currentTime() });
     }
-
     if (key === currentChar) {
       playSound();
       const updatedTypedChars = typedChars + key;
-      setTypedChars(updatedTypedChars);
+      dispatch({ type: actionTypes.SET_TYPED_CHARS, payload: updatedTypedChars });
 
-      setAccuracy(
-        (
+      dispatch({
+        type: actionTypes.SET_ACCURACY,
+        payload: (
           (updatedOutgoingChars.length * 100) /
           updatedTypedChars.length
-        ).toFixed(2)
-      );
+        ).toFixed(2),
+      });
       if (incomingChars.charAt(0) === " ") {
-        setWordCount(wordCount + 1);
-
+        dispatch({ type: actionTypes.SET_WORD_COUNT, payload: wordCount + 1 });
         const durationInMinutes = (currentTime() - startTime) / 60000.0;
-
-        setWpm(((wordCount + 1) / durationInMinutes).toFixed(2));
+        dispatch({
+          type: actionTypes.SET_WPM,
+          payload: ((wordCount + 1) / durationInMinutes).toFixed(2),
+        });
       }
       if (leftPadding.length > 0) {
-        setLeftPadding(leftPadding.substring(1));
+        dispatch({ type: actionTypes.SET_LEFT_PADDING, payload: leftPadding.substring(1) });
       }
-
       updatedOutgoingChars += currentChar;
-      setOutgoingChars(updatedOutgoingChars);
-
-      setCurrentChar(incomingChars.charAt(0));
-
+      dispatch({ type: actionTypes.SET_OUTGOING_CHARS, payload: updatedOutgoingChars });
+      dispatch({ type: actionTypes.SET_CURRENT_CHAR, payload: incomingChars.charAt(0) });
       updatedIncomingChars = incomingChars.substring(1);
       if (updatedIncomingChars.split(" ").length < 10) {
         updatedIncomingChars += " " + generate();
       }
-      setIncomingChars(updatedIncomingChars);
+      dispatch({ type: actionTypes.SET_INCOMING_CHARS, payload: updatedIncomingChars });
     } else {
       wrongSound();
     }
@@ -82,6 +83,7 @@ function Home() {
         <span className="Character-current">{currentChar}</span>
         <span>{incomingChars}</span>
       </p>
+        <span>your have to type <strong> {currentChar==" "?"Click Space":currentChar}</strong> </span>
     </div>
   );
 }

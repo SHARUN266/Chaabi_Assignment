@@ -45,8 +45,15 @@ export const reducer = (state = initialState, { type, payload }) => {
     case acionTypes.SET_LEFT_PADDING: {
       return {
         ...state,
-        outgoingChars: payload,
+        leftPadding: payload,
       };
+    }
+    case acionTypes.SET_OUTGOING_CHARS:{
+      return {
+        ...state,
+        outgoingChars:payload
+
+      }
     }
     case acionTypes.SET_CURRENT_CHAR: {
       return {
