@@ -6,7 +6,7 @@ export default function Login({ isOpen, onClose, onOpen }) {
     <Modal
       size={["md", "lg", "4xl"]}
       isOpen={isOpen}
-      onClose={onClose}
+   
       onOpen={onOpen}
     >
       <ModalOverlay />
