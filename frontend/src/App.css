@@ -1,15 +1,16 @@
-.App {
-    text-align: center;
-    font-family: monospace;
-  }
+@import url(https://fonts.googleapis.com/css?family=Roboto+Mono:100,200,300,regular,500,600,700,100italic,200italic,300italic,italic,500italic,600italic,700italic);
 .Character {
-    white-space: pre;
-  }
-  
-  .Character-current {
-    background-color: #09d3ac;
-  }
-  
-  .Character-out {
-    color: silver;
-  }
+  font-family: 'Roboto Mono';
+}
+
+.currentChar {
+  background-color: green;
+  color: white;
+  position: relative;
+  transition: all 0.1s ease-out;
+}
+
+.typedChar {
+  color: silver;
+ 
+}

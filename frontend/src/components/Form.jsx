@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import SocialIcons from "../components/SocialIcons";
 import SideImage from "../assets/boy_with_keyboard.gif";
 import {
@@ -17,19 +17,48 @@ import { HiUser } from "react-icons/hi";
 import { MdAlternateEmail } from "react-icons/md";
 
 import { useState } from "react";
-export default function Form() {
+import { createContextAPI } from "../Context/CreateContext";
+export default function Form({ onClose }) {
+  const { text, setText, name, setName } = useContext(createContextAPI);
   const [isLoading, setIsloading] = useState(false);
 
   const toast = useToast();
 
-  const [text, setText] = useState({
-    email: "",
-    password: "",
-  });
   function handleChange({ target: { name, value } }) {
     setText((prev) => ({ ...prev, [name]: value }));
   }
+  function handleClick() {
+    setIsloading(true);
+    if(text.username===''||text.email===''){
+      setTimeout(() => {
+        
+        toast({
+          title: "Fill details",
+  
+          status: "error",
+          duration: 9000,
+          isClosable: true,
+        });
+        setIsloading(false);
+      }, 2000);
 
+
+    }else{
+      setTimeout(() => {
+        setName(text);
+        onClose();
+        toast({
+          title: "Login successfully",
+  
+          status: "success",
+          duration: 9000,
+          isClosable: true,
+        });
+        setIsloading(false);
+      }, 2000);
+    }
+   
+  }
   return (
     <Stack
       bg={"white"}
@@ -53,7 +82,7 @@ export default function Form() {
 
             <Input
               //id={styles.Input}
-              name="email"
+              name="username"
               onChange={(e) => handleChange(e)}
               focusBorderColor="white"
               type="name"
@@ -67,7 +96,7 @@ export default function Form() {
             </InputLeftElement>
             <Input
               // id={styles.Input}
-              name="password"
+              name="email"
               onChange={(e) => handleChange(e)}
               type="email"
               focusBorderColor="white"
@@ -87,7 +116,7 @@ export default function Form() {
               color={"white"}
               fontWeight={100}
               w="40%"
-              //onClick={()=>handleClick(text,createSignIn,toast,dispatch)}
+              onClick={handleClick}
               colorScheme={"yellow"}
             >
               Submit

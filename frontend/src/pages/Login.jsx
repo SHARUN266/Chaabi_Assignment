@@ -11,7 +11,7 @@ export default function Login({ isOpen, onClose, onOpen }) {
     >
       <ModalOverlay />
       <ModalContent>
-        <Form />
+        <Form onClose={onClose} />
       </ModalContent>
     </Modal>
   );
